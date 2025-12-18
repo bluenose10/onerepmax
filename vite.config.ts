@@ -18,29 +18,33 @@ export default defineConfig(({ mode }) => {
    plugins: [
   react(),
   VitePWA({
-    registerType: 'autoUpdate',
-    manifest: {
-      name: 'RepMax1 – 1 Rep Max Calculator',
-      short_name: 'RepMax1',
-      description: 'Free 1 Rep Max (1RM) calculator for strength training.',
-      theme_color: '#D0FB0D',
-      background_color: '#000000',
-      display: 'standalone',
-      start_url: '/',
-      icons: [
-        {
-          src: '/pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png'
-        },
-        {
-          src: '/pwa-512x512.PNG',
-          sizes: '512x512',
-          type: 'image/png'
-        }
-      ]
-    }
-  })
+  registerType: 'autoUpdate',
+  manifest: {
+    name: 'RepMax1 – 1 Rep Max Calculator',
+    short_name: 'RepMax1',
+    description: 'Free 1 Rep Max (1RM) calculator for strength training.',
+    theme_color: '#D0FB0D',
+    background_color: '#000000',
+    display: 'standalone',
+    start_url: '/',
+    orientation: 'portrait-primary',
+    icons: [
+      {
+        src: '/pwa-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any'
+      },
+      {
+        src: '/pwa-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any'
+      }
+    ]
+  }
+})
+
 ],
 
 
