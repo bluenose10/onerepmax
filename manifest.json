@@ -1,0 +1,25 @@
+
+{
+  "name": "OneRepMax",
+  "short_name": "OneRepMax",
+  "description": "Professional 1-Rep Max Strength Calculator",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D0D0D",
+  "theme_color": "#D0FB0D",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/neon/192/D0FB0D/weightlift.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://img.icons8.com/neon/512/D0FB0D/weightlift.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

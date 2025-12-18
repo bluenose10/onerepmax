@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>1-Rep Max Calculator</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#D0FB0D" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="OneRepMax" />
+    <link rel="apple-touch-icon" href="https://img.icons8.com/neon/192/D0FB0D/weightlift.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-color: #000000;
+        --accent-color: #D0FB0D;
+      }
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        min-height: 100vh;
+        color: #f8fafc;
+        overflow-x: hidden;
+        margin: 0;
+      }
+
+      /* Cosmic Background Container */
+      .cosmic-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+        overflow: hidden;
+      }
+
+      /* Starfield Layers */
+      .stars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .stars-1 {
+        background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                          radial-gradient(1px 1px at 40px 70px, rgba(208, 251, 13, 0.5), rgba(0,0,0,0)),
+                          radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                          radial-gradient(1px 1px at 80px 120px, #ffffff, rgba(0,0,0,0)),
+                          radial-gradient(1px 1px at 110px 10px, rgba(208, 251, 13, 0.3), rgba(0,0,0,0)),
+                          radial-gradient(1px 1px at 150px 50px, #ffffff, rgba(0,0,0,0));
+        background-repeat: repeat;
+        background-size: 200px 200px;
+        opacity: 0.3;
+        animation: stars-drift 100s linear infinite;
+      }
+
+      .stars-2 {
+        background-image: radial-gradient(1.5px 1.5px at 100px 100px, #ffffff, rgba(0,0,0,0)),
+                          radial-gradient(1.5px 1.5px at 200px 250px, rgba(208, 251, 13, 0.4), rgba(0,0,0,0)),
+                          radial-gradient(1.5px 1.5px at 300px 400px, #ffffff, rgba(0,0,0,0));
+        background-repeat: repeat;
+        background-size: 400px 400px;
+        opacity: 0.2;
+        animation: stars-drift 150s linear infinite reverse;
+      }
+
+      @keyframes stars-drift {
+        from { transform: translateY(0); }
+        to { transform: translateY(-400px); }
+      }
+
+      /* Nebula Clouds (The Orbs) */
+      .nebula {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(140px);
+        opacity: 0.12;
+        mix-blend-mode: screen;
+        animation: nebula-float 40s ease-in-out infinite alternate;
+      }
+
+      .nebula-1 {
+        width: 800px;
+        height: 800px;
+        background: var(--accent-color);
+        top: -10%;
+        left: -10%;
+      }
+
+      .nebula-2 {
+        width: 600px;
+        height: 600px;
+        background: #4a5400; /* Darker version of accent */
+        bottom: -5%;
+        right: -10%;
+        animation-duration: 60s;
+        animation-delay: -10s;
+      }
+
+      @keyframes nebula-float {
+        0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+        50% { transform: translate(5%, 10%) scale(1.1) rotate(45deg); }
+        100% { transform: translate(-2%, 5%) scale(0.9) rotate(-45deg); }
+      }
+
+      /* Tech Overlay: Scanlines & Vignette */
+      .tech-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                    linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+        background-size: 100% 4px, 3px 100%;
+        opacity: 0.2;
+      }
+
+      .vignette {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+        pointer-events: none;
+      }
+
+      .glass-card {
+        background: rgba(10, 10, 10, 0.6);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        box-shadow: 
+          0 25px 60px -15px rgba(0, 0, 0, 0.9),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.01);
+      }
+
+      .glass-card:hover {
+        border-color: rgba(208, 251, 13, 0.12);
+        box-shadow: 
+          0 25px 60px -15px rgba(0, 0, 0, 0.9),
+          0 0 30px rgba(208, 251, 13, 0.04);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #D0FB0D !important;
+        box-shadow: 0 0 25px rgba(208, 251, 13, 0.15);
+      }
+
+      .animate-in {
+        animation-fill-mode: both;
+      }
+
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1a1a1a;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #D0FB0D;
+      }
+
+      .accent-glow {
+        text-shadow: 0 0 25px rgba(208, 251, 13, 0.5), 0 0 50px rgba(208, 251, 13, 0.2);
+      }
+    </style> 
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the 1-Rep Max metric?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A theoretical maximum representing the ultimate capacity of a muscle group for a single concentric effort. It serves as the baseline for performance-based loading."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Metric Reliability?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Highest precision is achieved when calculating from a 2–5 rep fatigue set. Beyond 10 reps, the formula drifts as metabolic endurance becomes the dominant limiting factor."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate is a 1 rep max calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 1RM calculator provides an estimate based on mathematical models. Accuracy depends on repetition range, fatigue, and lifting technique."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it safe to test a true one-rep max?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Testing a true 1RM can be risky without proper experience, warm-up, and safety equipment. Many lifters use estimated 1RM values instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this calculator for bench press, squat, or deadlift?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This calculator can be used for any resistance exercise where weight and repetitions are clearly defined."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Integration with Training?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the calculated intensities to prescribe exact loading for Strength (85%+), Power (75–85%), or Hypertrophy (60–75%) phases of a block periodization cycle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Frequency of Testing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Neurological fatigue from absolute max testing is significant. We recommend using this calculator to track estimated 1RM weekly, saving actual max-out sessions for the end of a 12-week block."
+      }
+    }
+  ]
+}
+</script>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3"
+      }
+    }
+    </script> 
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <!-- Netlify hidden form for bot crawling -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
+
+    <div class="cosmic-bg">
+      <div class="stars stars-1"></div>
+      <div class="stars stars-2"></div>
+      <div class="nebula nebula-1"></div>
+      <div class="nebula nebula-2"></div>
+      <div class="vignette"></div>
+      <div class="tech-overlay"></div>
+    </div>
+    
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
